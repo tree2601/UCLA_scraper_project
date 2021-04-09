@@ -1,0 +1,129 @@
+<html>
+    <head>
+            <title>
+        Too Young Too Simple Search Engine
+            </title>
+        <script>
+
+        function my_search(){
+
+             keyword = document.getElementById("search_box_id").value;
+             document.getElementById("loading").innerHTML = "Loading...";
+             const http = new XMLHttpRequest();
+             http.open("GET",'http://127.0.0.1:5000/search?keyword=' + keyword);
+             http.send();
+             // Set text to Loading
+             http.onreadystatechange = (e) => {
+
+             // Set text to Loading Completed
+             document.getElementById("loading").innerHTML = "Loading Complete!";
+
+             var i ;
+             var arr = JSON.parse(http.responseText);
+
+               //clear results
+               results.innerHTML = "";
+
+             for (i=1;i<arr.length+1;i++){
+
+                // create new div
+               var result = document.createElement('div');
+               result.className = "result";
+
+
+                // create link
+               var link = document.createElement('div');
+               link.className = "link";
+               link.innerHTML = arr[i-1].url;
+
+
+                // create title with <a href=....></a>
+
+                var title = document.createElement('a');
+                title.target = 'blank'
+                title.className = "title";
+                title.innerHTML =arr[i-1].title;
+                title.href = arr[i-1].url;
+
+
+                // create description
+
+               var description = document.createElement('div');
+               description.className = "description";
+               description.innerHTML = arr[i-1].description;
+
+                result.appendChild(link);
+                result.appendChild(title);
+                result.appendChild(description);
+
+               document.getElementById("results").appendChild(result);
+
+             }
+
+             };
+
+             document.getElementById("finishing").innerHTML = "----End----";
+         }
+        </script>
+
+        <style type=""text/css">
+            #title {
+         font-family:'Lucida Console';
+         font-size:40px;
+        }
+
+            body {
+
+            }
+
+            img {
+
+            }
+
+            .result {
+                padding: 10px 10px 10px 10px;
+            }
+
+            .link {
+                 color:green;
+                 font-family:'Papyrus';
+                 font-size: 20px;
+            }
+
+        .title {
+                 color:purple;
+                 font-size: 15px;
+            }
+            .description {
+                font-family: 'Helvetica';
+                font-size: 20px;
+            }
+
+            results {
+                padding-top: 50px;
+            }
+
+        </style>
+    </head>
+
+
+<body>
+
+
+   <img src="{{url_for('static', filename='ucla.png')}}" />
+   <div id="title">   Too Young Too Simple Search Engine   </div>
+
+   <input id = "search_box_id" type="text" placeholder="Search something.."></input>
+
+   <button type="button" onclick = "my_search()">UCLA Search</button>
+
+   <div id="loading" class = 'table'> -------------------  </div>
+
+   <div id="results" class = 'table' >   </div>
+
+   <div id="finishing" class = 'table'> -------------------  </div>
+
+</body>
+
+
+</html>
